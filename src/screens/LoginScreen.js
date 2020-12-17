@@ -1,25 +1,47 @@
 import React, {useState} from 'react';
 import {Text, View, TouchableOpacity, StyleSheet, TextInput} from 'react-native';
+import {firebase} from '../firebase/config';
 
+//Code below for rendering LoginScreen, handling authentication and handling styling
 const LoginScreen = ({navigation}) => {
-
+	//Declaring required state variables
 	const [email, setEmail] = useState('')
 	const [password,setPassword] = useState('')
 
 	const onFootLinkPress = () => {
 		navigation.navigate("Register")
 	}
-	const onLoginPress = () => {
-	
+	//Authentication code disabled for testing navigation, was unable to find firebase store
+	/*const onLoginPress = () => {
+		firebase.auth().signInWithEmailAndPassword(email, password).then((response) => {
+			const userid = response.user.uid
+			const usersRef = firebase.firestore().collection('users')
+			usersRef.doc(userid).get().then(firestoreDocument => {
+				if(!firestoreDocument.exists){
+					alert("User does not exist.")
+					return;
+				}
+				const user = firestoreDocument.data()
+				navigation.navigate('Home', {user})
+			})
+			.catch(err => {
+				alert(err)
+			});
+		})
 	}
-	
+	*/
+	const onLoginPress = () => {
+		navigation.navigate('Home')
+	}
+	//Screen renders here
+	//Inputs are Email and password
 	return(
 		<View style={styles.container}>
 			<Text>Email: </Text>
 			<TextInput 
 				style={styles.input}
 				placeholder ={'E-mail'}
-				placeholderTextColor=""
+				placeholderTextColor='#080807'
 				onChangeText = {(text) => setEmail(text)}
 				value = {email}
 				underlineColorAndroid = "transparent"
@@ -29,7 +51,8 @@ const LoginScreen = ({navigation}) => {
 			<TextInput 
 				style={styles.input}
 				placeholder ={'Password'}
-				placeholderTextColor=""
+				secureTextEntry={true}
+				placeholderTextColor='#080807'
 				onChangeText = {(text) => setPassword(text)}
 				value = {password}
 				underlineColorAndroid = "transparent"
@@ -63,17 +86,21 @@ const styles = StyleSheet.create({
 	},
 	fieldHeader:{
 		fontSize: 20,
-		color:"#c4b5b5",
+		color:'#c4b5b5',
 		fontWeight: "bold"
 	},
 	input:{
 		borderRadius: 5,
 		backgroundColor: '#c4b5b5',
-		margin: 20,
+		marginTop: 20,
+		marginLeft: 25,
+		marginRight: 25,
+		marginBottom: 20,
 		padding: 10,
 		paddingLeft: 20,
 		height: 40,
-		width: 250
+		width: 250,
+		overflow:'hidden'
 	},
 	footSection:{
 		alignItems:'center',
